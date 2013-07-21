@@ -4,6 +4,20 @@
   <classpathentry output="target/scala-2.10/test-classes" path="src/test/scala" kind="src"></classpathentry>
   <classpathentry output="target/scala-2.10/test-classes" path="src/test/java" kind="src"></classpathentry>
   <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/com.github.tmingos/casbah_2.10/jars/casbah_2.10-2.5.0-SNAPSHOT.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/com.github.tmingos/casbah-util_2.10/jars/casbah-util_2.10-2.5.0-SNAPSHOT.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.6.0.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.scalaj/scalaj-time_2.10.0-M7/jars/scalaj-time_2.10.0-M7-0.6.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/joda-time/joda-time/jars/joda-time-2.1.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.2.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.specs2/specs2_2.10.0-RC2/jars/specs2_2.10.0-RC2-1.12.2.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.specs2/specs2-scalaz-core_2.10.0-RC2/jars/specs2-scalaz-core_2.10.0-RC2-6.0.1.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.mongodb/mongo-java-driver/jars/mongo-java-driver-2.9.3.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/com.github.tmingos/casbah-commons_2.10/jars/casbah-commons_2.10-2.5.0-SNAPSHOT.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/com.github.tmingos/casbah-core_2.10/jars/casbah-core_2.10-2.5.0-SNAPSHOT.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/com.github.tmingos/casbah-query_2.10/jars/casbah-query_2.10-2.5.0-SNAPSHOT.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/com.github.tmingos/casbah-gridfs_2.10/jars/casbah-gridfs_2.10-2.5.0-SNAPSHOT.jar" kind="lib"></classpathentry>
+  <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.scalaz/scalaz-core_2.10/bundles/scalaz-core_2.10-7.0.0.jar" kind="lib"></classpathentry>
   <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.specs2/specs2_2.10/jars/specs2_2.10-1.14.jar" kind="lib"></classpathentry>
   <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.specs2/specs2-scalaz-core_2.10/jars/specs2-scalaz-core_2.10-7.0.0.jar" kind="lib"></classpathentry>
   <classpathentry path="/Users/fayvorlove/.ivy2/cache/org.specs2/specs2-scalaz-concurrent_2.10/jars/specs2-scalaz-concurrent_2.10-7.0.0.jar" kind="lib"></classpathentry>

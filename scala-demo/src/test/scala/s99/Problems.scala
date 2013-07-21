@@ -3,8 +3,6 @@ package s99
 import org.junit.runner._
 import org.specs2.runner._
 import org.specs2.mutable._
-import org.specs2.specification.Outside
-import org.specs2.specification.Scope
 import s99.Solutions._
 
 @RunWith(classOf[JUnitRunner])
