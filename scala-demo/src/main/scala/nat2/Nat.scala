@@ -1,4 +1,4 @@
-package nat2
+// package nat2
 
 import algebra._
 import func.EqF
@@ -9,7 +9,7 @@ case class Succ(n: Nat) extends Nat
 
 object Zero extends Nat
 
-object NatAdd {
+// object NatAdd {
   
     sealed trait ANat {
 	  // def flatten: ANat
@@ -37,7 +37,10 @@ object NatAdd {
 	  // def reduce = this.flatten.reduce
 	}
 	
+	
 	object Add {
+	  type AEqF[S <: ANat, T <: ANat] = EqF[ANat, S, T]
+	  
 	  def addZero = new EqF[ANat, ANat, Add[ANat, AZero]] {
 	    def apply(a: ANat) = Add(a, AZero)
 	    def unapply(a: Add[ANat, AZero]) = a.left
@@ -47,6 +50,15 @@ object NatAdd {
 	    def apply(a: Add[ANat, ASucc]) = ASucc(Add(a.left, a.right match { case ASucc(x) => x }))
 	    def unapply(a: ASucc) = a match { case ASucc(x: Add[_, _]) => Add(x.left, ASucc(x.right))}
 	  }
+	  
+	  def applyToRight[U <: ANat, V <: ANat] = (f: AEqF[U, V]) => new AEqF[Add[ANat, U], Add[ANat, V]] {
+	    def apply(a: Add[ANat, U]): Add[ANat, V] = Add(a.left, f.apply(a.right))
+	    def unapply(a: Add[ANat, V]): Add[ANat, U] = Add(a.left, f.unapply(a.right))
+	  }
+	  
+	  def addZeroToRight = applyToRight(addZero)
+	  
+	  
 	}
 	
 	object Associate {
@@ -54,6 +66,7 @@ object NatAdd {
 	    def apply(a: Add[Add[ANat, ANat], AZero]) = Add(a.left.left, Add(a.left.right, AZero))
 	    def unapply(a: Add[ANat, Add[ANat, AZero]]) = Add(Add(a.left, a.right.left), AZero)
 	  }
+	  
 	}
 	
 //	def associateRight(n: Add[Add[_, _], ANat]): Add[ANat, Add[_, _]] = n match {
@@ -61,4 +74,4 @@ object NatAdd {
 //	  case _: ASucc => n
 //	  case x: Add => Add(x.left, Add(x.right, n.right)) // doesn't make use of definition
 //	}
-}
+// }
