@@ -41,9 +41,9 @@ object Zero extends Nat
 	object Add {
 	  type AEqF[S <: ANat, T <: ANat] = EqF[ANat, S, T]
 	  
-	  def addZero = new EqF[ANat, ANat, Add[ANat, AZero]] {
-	    def apply(a: ANat) = Add(a, AZero)
-	    def unapply(a: Add[ANat, AZero]) = a.left
+	  def addZero[A <: ANat] = new EqF[ANat, A, Add[A, AZero]] {
+	    def apply(a: A) = Add(a, AZero)
+	    def unapply(add: Add[A, AZero]) = add.left
 	  }
 	  
 	  def addSucc = new EqF[ANat, Add[ANat, ASucc], ASucc] {
@@ -56,9 +56,9 @@ object Zero extends Nat
 	    def unapply(a: Add[ANat, V]): Add[ANat, U] = Add(a.left, f.unapply(a.right))
 	  }
 	  
-	  def addZeroToRight = applyToRight(addZero)
+	  def addZeroToRight = applyToRight(addZero[ANat])
 	  
-	  
+	  def associateZeroRight = addZeroToRight compose addZero[Add[ANat, ANat]].invert
 	}
 	
 	object Associate {
