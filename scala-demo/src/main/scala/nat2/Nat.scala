@@ -23,12 +23,12 @@ object Zero extends Nat
 	  // def reduce = Zero
 	}
 	
-	case class ASucc(n: ANat) extends ANat {
+	case class ASucc[S <: ANat](n: S) extends ANat {
 	  // def flatten = ASucc(n.flatten)
 	  // def reduce = Succ(n.reduce)
 	}
 	
-	case class Add[S <: ANat, T <: ANat](left: S, right: T) extends ANat {
+	case class Add[+S <: ANat, +T <: ANat](left: S, right: T) extends ANat {
 //	  def flatten = right match {
 //	    case AZero => left.flatten
 //	    case ASucc(n) => ASucc(Add(left, n).flatten)
@@ -41,24 +41,68 @@ object Zero extends Nat
 	object Add {
 	  type AEqF[S <: ANat, T <: ANat] = EqF[ANat, S, T]
 	  
+	  // a => a + 0
 	  def addZero[A <: ANat] = new EqF[ANat, A, Add[A, AZero]] {
 	    def apply(a: A) = Add(a, AZero)
 	    def unapply(add: Add[A, AZero]) = add.left
 	  }
 	  
-	  def addSucc = new EqF[ANat, Add[ANat, ASucc], ASucc] {
-	    def apply(a: Add[ANat, ASucc]) = ASucc(Add(a.left, a.right match { case ASucc(x) => x }))
-	    def unapply(a: ASucc) = a match { case ASucc(x: Add[_, _]) => Add(x.left, ASucc(x.right))}
+	  // a + S(b) => S(a+b)
+	  def raiseSucc[A <: ANat, B <: ANat] = new EqF[ANat, Add[A, ASucc[B]], ASucc[Add[A, B]]] {
+	    def apply(a: Add[A, ASucc[B]]) = ASucc(Add(a.left, a.right match { case ASucc(x) => x }))
+	    def unapply(a: ASucc[Add[A, B]]) = a match { case ASucc(x: Add[A, B]) => Add(x.left, ASucc(x.right))}
 	  }
 	  
+	  // a + b => a + f(b)
 	  def applyToRight[U <: ANat, V <: ANat] = (f: AEqF[U, V]) => new AEqF[Add[ANat, U], Add[ANat, V]] {
 	    def apply(a: Add[ANat, U]): Add[ANat, V] = Add(a.left, f.apply(a.right))
 	    def unapply(a: Add[ANat, V]): Add[ANat, U] = Add(a.left, f.unapply(a.right))
 	  }
 	  
+	  // S(a) => S(f(a))
+	  def applyToPred[U <: ANat, V <: ANat] = (f: AEqF[U, V]) => new AEqF[ASucc[U], ASucc[V]] {
+	    def apply(s: ASucc[U]): ASucc[V] = s match { case ASucc(u) => ASucc(f.apply(u))}
+	    def unapply(s: ASucc[V]): ASucc[U] = s match { case ASucc(v) => ASucc(f.unapply(v))}
+	  }
+	  
+	  // a + b => a + (b + 0)
 	  def addZeroToRight = applyToRight(addZero[ANat])
 	  
-	  def associateZeroRight = addZeroToRight compose addZero[Add[ANat, ANat]].invert
+	  // (a + b) + 0 => a + (b + 0)
+	  def associateRightZero = addZeroToRight compose addZero[Add[ANat, ANat]].invert
+	  
+	  // (a + (b + S(c)) => a + S(b + c)
+	  def raiseSuccOnRight[B <: ANat, C <: ANat] = applyToRight(raiseSucc[B, C])
+	  
+	  /*
+	   * steps of associativity proof
+	   */
+	  
+	  // (a + b) + 0 => a + (b + 0)
+	  def base = associateRightZero
+	  
+	  // (a + b) + S(c) => S((a + b) + c)
+	  def step1 = raiseSucc[Add[ANat, ANat], ANat]
+	  
+	  // S((a + b) + c) => S(a + (b + c))
+	  def step2 = applyToPred(associateRight) // (associateRightZero, associateRightSucc, associateRightAdd)
+	  
+	  // S(a + (b + c)) => a + S(b + c)
+	  def step3 = raiseSucc[ANat, Add[ANat, ANat]].invert
+	  
+	  // a + S(b + c) => a + (b + S(c))
+	  def step4 = raiseSuccOnRight[ANat, ANat].invert
+	  
+//	  def associateRightPred = applyToPred(associateRight)
+//	  def associateRightSucc = new AEqF[Add[Add[ANat, ANat], ASucc[ANat]], Add[ANat, Add[ANat, ASucc[ANat]]]] {
+	  
+	  def associateRight: AEqF[Add[Add[ANat, ANat], ANat], Add[ANat, Add[ANat, ANat]]] = new AEqF[Add[Add[ANat, ANat], ANat], Add[ANat, Add[ANat, ANat]]] {
+	    def apply(a: Add[Add[ANat, ANat], ANat]) = a match {
+	      case x: Add[Add[ANat, ANat], AZero] => base.apply(x)
+ 	      case x: Add[Add[ANat, ANat], ASucc[ANat]] => (step4 compose step3 compose step2 compose step1).apply(x)
+	    }
+	  }
+	  // applyToPred(associateRight) compose raiseSucc[Add[ANat, ANat], ANat]
 	}
 	
 	object Associate {
