@@ -76,33 +76,39 @@ object Zero extends Nat
 	  
 	  /*
 	   * steps of associativity proof
+	   * (a + b) + c = a + (b + c)
 	   */
 	  
-	  // (a + b) + 0 => a + (b + 0)
+	  // base case
+	  // (a + b) + 0 = a + (b + 0)
 	  def base = associateRightZero
 	  
-	  // (a + b) + S(c) => S((a + b) + c)
-	  def step1 = raiseSucc[Add[ANat, ANat], ANat]
+	  // induction
+	  // (a + b) + S(c) = a + (b + S(c))
+	  def indy = i4 compose i3 compose i2 compose i1
 	  
-	  // S((a + b) + c) => S(a + (b + c))
-	  def step2 = applyToPred(associateRight) // (associateRightZero, associateRightSucc, associateRightAdd)
+	  // (a + b) + S(c) = S((a + b) + c)
+	  def i1 = raiseSucc[Add[ANat, ANat], ANat]
 	  
-	  // S(a + (b + c)) => a + S(b + c)
-	  def step3 = raiseSucc[ANat, Add[ANat, ANat]].invert
+	  // S((a + b) + c) = S(a + (b + c))
+	  def i2 = applyToPred(associateRight) // (associateRightZero, associateRightSucc, associateRightAdd)
 	  
-	  // a + S(b + c) => a + (b + S(c))
-	  def step4 = raiseSuccOnRight[ANat, ANat].invert
+	  // S(a + (b + c)) = a + S(b + c)
+	  def i3 = raiseSucc[ANat, Add[ANat, ANat]].invert
 	  
-//	  def associateRightPred = applyToPred(associateRight)
-//	  def associateRightSucc = new AEqF[Add[Add[ANat, ANat], ASucc[ANat]], Add[ANat, Add[ANat, ASucc[ANat]]]] {
+	  // a + S(b + c) = a + (b + S(c))
+	  def i4 = raiseSuccOnRight[ANat, ANat].invert
 	  
+	  // (a + b) + c = a + (b + c)
 	  def associateRight: AEqF[Add[Add[ANat, ANat], ANat], Add[ANat, Add[ANat, ANat]]] = new AEqF[Add[Add[ANat, ANat], ANat], Add[ANat, Add[ANat, ANat]]] {
 	    def apply(a: Add[Add[ANat, ANat], ANat]) = a match {
 	      case x: Add[Add[ANat, ANat], AZero] => base.apply(x)
- 	      case x: Add[Add[ANat, ANat], ASucc[ANat]] => (step4 compose step3 compose step2 compose step1).apply(x)
+ 	      case x: Add[Add[ANat, ANat], ASucc[ANat]] => indy.apply(x)
 	    }
 	  }
-	  // applyToPred(associateRight) compose raiseSucc[Add[ANat, ANat], ANat]
+	  
+	  // a + (b + c) = (a + b) + c
+	  def associateLeft = associateRight.invert
 	}
 	
 	object Associate {
