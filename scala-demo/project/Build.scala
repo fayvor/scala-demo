@@ -18,6 +18,7 @@ object DemoBuild extends Build {
       "junit" % "junit" % "4.8" % "test->default",
       // "com.mongodb.casbah" %% "casbah" % "2.6.0",
       "com.github.tmingos" % "casbah_2.10" % "2.5.0-SNAPSHOT",
+      "com.chuusai" %% "shapeless" % "1.2.4",
       "org.scalaz" %% "scalaz-core" % "7.0.0"
     ),
     
